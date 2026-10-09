@@ -1,0 +1,110 @@
+/* ===== 登录卡片 ===== */
+.login-card {
+  margin: 80rpx 40rpx;
+  padding: 60rpx 40rpx;
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  border-radius: 24rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 30rpx rgba(0,0,0,.18);
+}
+.login-emoji { font-size: 96rpx; line-height: 1; }
+.login-title { font-size: 36rpx; font-weight: 700; margin-top: 20rpx; color: var(--text); }
+.login-sub { font-size: 26rpx; color: var(--muted); margin: 16rpx 0 40rpx; }
+.wx-login-btn {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand));
+  color: var(--on-brand);
+  font-weight: 700;
+  font-size: 30rpx;
+  border-radius: 44rpx;
+  padding: 8rpx 0;
+}
+.wx-login-btn::after { border: none; }
+
+/* ===== 个人资料卡 ===== */
+.profile {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 28rpx;
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  margin: 16rpx;
+  border-radius: 20rpx;
+}
+.avatar-btn {
+  width: 110rpx;
+  height: 110rpx;
+  padding: 0;
+  margin: 0;
+  background: var(--card-2);
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-btn::after { border: none; }
+.avatar { width: 110rpx; height: 110rpx; border-radius: 50%; }
+.avatar-emoji { font-size: 60rpx; line-height: 110rpx; text-align: center; }
+.profile-info { flex: 1; margin-left: 24rpx; }
+.nick-input {
+  font-size: 32rpx;
+  font-weight: 700;
+  height: 48rpx;
+  line-height: 48rpx;
+  color: var(--text);
+}
+.profile-tip { font-size: 24rpx; color: var(--muted); margin-top: 6rpx; }
+
+/* ===== 设置入口 ===== */
+.settings-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16rpx;
+  padding: 26rpx 28rpx;
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  border-radius: 20rpx;
+}
+.se-left { font-size: 30rpx; color: var(--text); }
+.se-arrow { font-size: 38rpx; color: var(--muted); }
+.review-entry { border-color: var(--brand); }
+.review-entry .se-left { color: var(--brand); font-weight: 600; }
+.status-pending { background: var(--brand-soft); color: var(--brand-2); font-size: 20rpx; padding: 2rpx 12rpx; border-radius: 999rpx; margin-left: 8rpx; }
+
+/* ===== 分段切换 ===== */
+.seg {
+  display: flex;
+  margin: 8rpx 16rpx 0;
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+.seg-item {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  font-size: 28rpx;
+  color: var(--muted);
+}
+.seg-item.on {
+  color: var(--brand);
+  font-weight: 700;
+  border-bottom: 4rpx solid var(--brand);
+}
+
+/* ===== 操作按钮 ===== */
+.mini-btn {
+  flex: 1;
+  margin: 0;
+  font-size: 26rpx;
+  color: var(--brand);
+  background: transparent;
+  border-radius: 0;
+  border-right: 1rpx solid var(--line-2);
+}
+.mini-btn::after { border: none; }
+.mini-btn.danger { color: var(--danger); }
+.empty { text-align: center; color: var(--muted); padding: 80rpx 40rpx; font-size: 27rpx; }

@@ -1,0 +1,67 @@
+<view class="page app-root {{themeClass}}">
+  <!-- 账号 -->
+  <view class="card sec">
+    <view class="sec-title">账号</view>
+    <view class="row-item">
+      <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar avatar-empty">🧑</view>
+      <view class="acc-info">
+        <view class="nick">{{loggedIn ? (nickName || '微信用户') : '未登录'}}</view>
+        <view class="sub">{{isAdmin ? '👑 超级管理员' : '普通用户'}}</view>
+      </view>
+    </view>
+    <view wx:if="{{openid}}" class="row-item" bindtap="revealOpenid">
+      <text class="label">openid</text>
+      <text class="val mono openid-mask">{{openidDisplay}}</text>
+      <text class="openid-hint" wx:if="{{openidMasked}}">双击显示</text>
+      <text class="link" catchtap="copyOpenid">复制</text>
+    </view>
+  </view>
+
+  <!-- 主题 -->
+  <view class="card sec">
+    <view class="sec-title">主题</view>
+    <view class="theme-list">
+      <view
+        wx:for="{{themes}}"
+        wx:key="key"
+        class="theme-item {{currentTheme === item.key ? 'on' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="chooseTheme"
+      >
+        <view class="theme-swatch">
+          <view class="theme-swatch-i" style="background:{{item.bg}}"></view>
+          <view class="theme-swatch-i" style="background:{{item.brand}}"></view>
+        </view>
+        <view class="theme-meta">
+          <view class="theme-name">{{item.label}}</view>
+          <view class="theme-desc">{{item.desc}}</view>
+        </view>
+        <view wx:if="{{currentTheme === item.key}}" class="theme-check">✓</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 通用 -->
+  <view class="card sec">
+    <view class="sec-title">通用</view>
+    <view class="row-item" bindtap="clearCache">
+      <text class="label">清除本地缓存</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="row-item">
+      <text class="label">地图标记</text>
+      <text class="val">按菜系四色区分</text>
+    </view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="card sec">
+    <view class="sec-title">关于</view>
+    <view class="row-item"><text class="label">应用</text><text class="val">香港美食地图</text></view>
+    <view class="row-item"><text class="label">版本</text><text class="val">{{version}}</text></view>
+    <view class="row-item"><text class="label">作者</text><text class="val">{{nickName || '我'}}（App 创建者）</text></view>
+  </view>
+
+  <view class="foot">🍜 记录每一次探店</view>
+</view>

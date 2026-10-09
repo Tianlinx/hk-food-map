@@ -1,0 +1,26 @@
+.app-root { min-height: 100vh; }
+.page-head { font-size: 30rpx; font-weight: 700; padding: 24rpx 24rpx 8rpx; }
+
+.sub-card {
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin: 16rpx 24rpx;
+}
+.sub-head { display: flex; align-items: center; justify-content: space-between; }
+.sub-name { font-size: 32rpx; font-weight: 700; color: var(--text); }
+.meta { display: flex; flex-wrap: wrap; gap: 12rpx; margin: 14rpx 0; }
+.tag { background: var(--brand-soft); color: var(--brand-2); font-size: 22rpx; padding: 4rpx 16rpx; border-radius: 999rpx; }
+.rating-label { background: var(--brand-soft); color: var(--brand-2); font-size: 22rpx; padding: 4rpx 16rpx; border-radius: 999rpx; }
+.sub-line { font-size: 26rpx; color: var(--muted); margin-top: 8rpx; }
+.sub-review { font-size: 27rpx; color: var(--text); margin-top: 12rpx; line-height: 1.6; }
+.sub-photos { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 16rpx; }
+.sub-photo { width: 150rpx; height: 150rpx; border-radius: 12rpx; background: var(--card-2); }
+.sub-actions { display: flex; gap: 16rpx; margin-top: 20rpx; }
+.mini-btn { flex: 1; font-size: 28rpx; border-radius: 999rpx; border: 2rpx solid var(--line); background: transparent; color: var(--text); }
+.mini-btn.ok { border-color: var(--brand); color: var(--brand); }
+.mini-btn.danger { border-color: var(--danger); color: var(--danger); }
+.mini-btn::after { border: none; }
+
+.empty { text-align: center; color: var(--muted); padding: 80rpx 40rpx; font-size: 27rpx; }

@@ -1,0 +1,52 @@
+<view wx:if="{{spot}}" class="detail app-root {{themeClass}}">
+  <!-- 封面大图 -->
+  <view class="cover">
+    <image wx:if="{{spot.coverUrl}}" class="cover-img" src="{{spot.coverUrl}}" mode="aspectFill" />
+    <view wx:else class="cover-empty">🍜</view>
+  </view>
+
+  <!-- 地图 -->
+  <map class="map" longitude="{{marker[0].longitude}}" latitude="{{marker[0].latitude}}" scale="15" markers="{{marker}}" />
+  <view class="loc-link">📍 {{spot.address || '位置未填写'}}</view>
+
+  <!-- 操作 -->
+  <view class="actions">
+    <button class="act" bindtap="copyName">📋 复制店名</button>
+    <button class="act {{isFav ? 'on' : ''}}" bindtap="toggleFav">{{isFav ? '★ 已收藏' : '☆ 收藏'}}</button>
+  </view>
+
+  <!-- 照片画廊 -->
+  <scroll-view wx:if="{{spot.photo_paths.length}}" class="gallery" scroll-x>
+    <image wx:for="{{spot.photo_paths}}" wx:key="*this" class="gallery-img" src="{{item}}" mode="aspectFill" />
+  </scroll-view>
+
+  <!-- 信息卡片 -->
+  <view class="card info">
+    <view class="name">{{spot.name}}</view>
+
+    <view class="meta">
+      <text wx:if="{{spot.district}}" class="tag">{{spot.district}}</text>
+      <text wx:if="{{spot.cuisine}}" class="tag">{{spot.cuisine}}</text>
+      <text wx:if="{{spot.cuisine_detail}}" class="tag">{{spot.cuisine_detail}}</text>
+    </view>
+
+    <view class="rating-row" wx:if="{{spot.rating}}">
+      <text class="star on big">{{spot.rating}}</text>
+      <text class="muted">{{spot.ratingLabel}}</text>
+      <text wx:if="{{spot.avgCost}}" class="avg">人均 HKD {{spot.avgCost}}</text>
+    </view>
+
+    <view wx:if="{{spot.address}}" class="line"><text class="label">地址</text><text class="val">{{spot.address}}</text></view>
+    <view wx:if="{{spot.recommendedDishes}}" class="line"><text class="label">推荐菜</text><text class="val">{{spot.recommendedDishes}}</text></view>
+    <view wx:if="{{spot.review}}" class="line col"><text class="label">点评</text><text class="val">{{spot.review}}</text></view>
+    <view class="line"><text class="label">发布</text><text class="val">{{spot.owner_name || '微信用户'}}</text></view>
+  </view>
+
+  <view wx:if="{{canManage}}" class="owner-actions">
+    <button class="btn-ghost edit" bindtap="editSpot">✏️ 编辑</button>
+    <button class="btn-ghost del" bindtap="deleteSpot">删除这条记录</button>
+    <text wx:if="{{isAdmin && !isMine}}" class="admin-tag">管理员操作</text>
+  </view>
+</view>
+
+<view wx:else class="loading muted">加载中…</view>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>导航</title>
+  <style>
+    body { font-family: -apple-system, "PingFang SC", sans-serif; background: #f5f5f5; margin: 0; padding: 32px 20px; color: #333; }
+    h2 { font-size: 18px; margin: 0 0 4px; }
+    .sub { font-size: 13px; color: #999; margin-bottom: 24px; word-break: break-all; }
+    .btn { display: block; width: 100%; box-sizing: border-box; padding: 16px; margin: 12px 0; background: #e64340; color: #fff; border: none; border-radius: 12px; font-size: 17px; }
+    .btn.ghost { background: #fff; color: #e64340; border: 1rpx solid #e64340; }
+    #tip { font-size: 14px; color: #666; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <h2>正在唤起导航…</h2>
+  <div class="sub" id="sub">如未自动跳转，请点击下方按钮</div>
+  <button class="btn" id="primary" onclick="primary()">在地图 App 中打开</button>
+  <button class="btn ghost" onclick="copyLink()">复制位置链接</button>
+
+  <script>
+    function getP(name) {
+      var m = location.search.match(new RegExp('[?&]' + name + '=([^&]*)'))
+      return m ? decodeURIComponent(m[1]) : ''
+    }
+    var lat = getP('lat'), lng = getP('lng'), name = getP('name'), address = getP('address'), app = getP('app') || 'amap'
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent)
+    var enc = encodeURIComponent
+    document.getElementById('sub').innerText = (name || '目的地') + '  (' + lat + ', ' + lng + ')'
+
+    // 各地图的 URL scheme（已安装则直接唤起 App）；web 为未安装时的网页兜底
+    function schemeFor() {
+      switch (app) {
+        case 'amap': // 高德
+          return isIOS
+            ? 'iosamap://path?sourceApplication=hkfood&dlat=' + lat + '&dlon=' + lng + '&dname=' + enc(name) + '&dev=0&t=0'
+            : 'androidamap://path?sourceApplication=hkfood&dlat=' + lat + '&dlon=' + lng + '&dname=' + enc(name) + '&dev=0'
+        case 'baidu': // 百度
+          return 'baidumap://map/direction?destination=latlng:' + lat + ',' + lng + '|name:' + enc(name) + '&mode=driving&coord_type=gcj02&src=hkfood'
+        case 'apple': // 苹果地图
+          return 'maps://?q=' + enc(name) + '&ll=' + lat + ',' + lng
+        case 'google': // Google 地图
+          return 'comgooglemaps://?q=' + lat + ',' + lng + '&center=' + lat + ',' + lng
+        default:
+          return ''
+      }
+    }
+    function webFor() {
+      switch (app) {
+        case 'amap': return 'https://uri.amap.com/marker?position=' + lng + ',' + lat + '&name=' + enc(name) + '&src=hkfood&coordinate=gcj02&callnative=1'
+        case 'baidu': return 'https://api.map.baidu.com/marker?location=' + lat + ',' + lng + '&title=' + enc(name) + '&content=' + enc(address) + '&output=html&coord_type=gcj02&src=hkfood'
+        case 'apple': return 'https://maps.apple.com/?q=' + enc(name) + '&ll=' + lat + ',' + lng
+        case 'google': return 'https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng
+        default: return ''
+      }
+    }
+    // 先尝试唤起 App，1.2s 内未离开页面则兜底打开网页版
+    function primary() {
+      var s = schemeFor(), w = webFor()
+      if (!s && !w) { document.getElementById('sub').innerText = '未知导航类型'; return }
+      if (s) {
+        var t = Date.now()
+        location.href = s
+        setTimeout(function () { if (Date.now() - t < 1600 && w) location.href = w }, 1200)
+      } else if (w) {
+        location.href = w
+      }
+    }
+    function copyLink() {
+      var w = webFor()
+      if (navigator.clipboard) navigator.clipboard.writeText(w)
+      alert('已复制网页版地图链接')
+    }
+    // 进入页面即尝试唤起
+    window.onload = primary
+  </script>
+</body>
+</html>

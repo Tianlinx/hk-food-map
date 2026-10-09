@@ -1,0 +1,13 @@
+# 微信开发者工具本机配置（含本机设置，不入库）
+project.private.config.json
+
+# 依赖
+node_modules/
+
+# 日志
+*.log
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+*.swp

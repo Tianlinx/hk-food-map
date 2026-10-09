@@ -1,0 +1,114 @@
+/* ===========================================================
+   custom-tab-bar 是组件，默认样式隔离，全局 app.wxss 的
+   CSS 变量进不来 → 图标/文字颜色会解析失败变透明/黑。
+   解决：组件内自带完整主题变量，4 套主题都直接定义在此。
+   =========================================================== */
+.tabbar {
+  --brand: #c9a96a; --brand-2: #e8d4a6; --on-brand: #1a1206;
+  --card: #1f1b16; --muted: #b6a484; --line: rgba(201, 169, 106, 0.30);
+}
+.theme-blackgold {
+  --brand: #c9a96a; --brand-2: #e8d4a6; --on-brand: #1a1206;
+  --card: #1f1b16; --muted: #b6a484; --line: rgba(201, 169, 106, 0.30);
+}
+.theme-mint {
+  --brand: #2f9e7e; --brand-2: #5cb89a; --on-brand: #ffffff;
+  --card: #ffffff; --muted: #6f8278; --line: rgba(47, 158, 126, 0.22);
+}
+.theme-warm {
+  --brand: #e08a3c; --brand-2: #f2b56a; --on-brand: #ffffff;
+  --card: #ffffff; --muted: #8a7a66; --line: rgba(224, 138, 60, 0.22);
+}
+.theme-indigo {
+  --brand: #7b9bff; --brand-2: #a8bcff; --on-brand: #ffffff;
+  --card: #182033; --muted: #9aa6c0; --line: rgba(107, 140, 255, 0.32);
+}
+
+.tabbar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  border-top: 1rpx solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 50;
+}
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.tab-ic {
+  width: 44rpx;
+  height: 44rpx;
+  position: relative;
+  color: var(--muted);
+}
+.tab-ic.on { color: var(--brand); }
+
+/* 地图图标：定位水滴 pin */
+.tab-ic-map::before {
+  content: '';
+  position: absolute;
+  top: 2rpx; left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 24rpx; height: 24rpx;
+  border-radius: 50% 50% 50% 0;
+  background: currentColor;
+}
+.tab-ic-map::after {
+  content: '';
+  position: absolute;
+  top: 9rpx; left: 50%;
+  transform: translateX(-50%);
+  width: 8rpx; height: 8rpx;
+  border-radius: 50%;
+  background: var(--card);
+}
+
+/* 我的图标：人像 */
+.tab-ic-mine::before {
+  content: '';
+  position: absolute;
+  top: 2rpx; left: 50%;
+  transform: translateX(-50%);
+  width: 18rpx; height: 18rpx;
+  border-radius: 50%;
+  background: currentColor;
+}
+.tab-ic-mine::after {
+  content: '';
+  position: absolute;
+  bottom: 2rpx; left: 50%;
+  transform: translateX(-50%);
+  width: 34rpx; height: 20rpx;
+  border-radius: 18rpx 18rpx 0 0;
+  background: currentColor;
+}
+
+.tab-text { font-size: 22rpx; color: var(--muted); margin-top: 4rpx; }
+.tab-text.on { color: var(--brand); font-weight: 600; }
+
+.tab-add {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.plus {
+  width: 88rpx;
+  height: 88rpx;
+  margin-top: -38rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand));
+  color: var(--on-brand);
+  font-size: 56rpx;
+  line-height: 82rpx;
+  text-align: center;
+  font-weight: 700;
+  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.3);
+}

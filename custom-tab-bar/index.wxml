@@ -1,0 +1,15 @@
+<view class="tabbar {{themeClass}}">
+  <view class="tab-item" data-path="{{list[0].pagePath}}" bindtap="switchTab">
+    <view class="tab-ic tab-ic-map {{selected === 0 ? 'on' : ''}}"></view>
+    <view class="tab-text {{selected === 0 ? 'on' : ''}}">{{list[0].text}}</view>
+  </view>
+
+  <view class="tab-add" bindtap="goAdd">
+    <view class="plus">＋</view>
+  </view>
+
+  <view class="tab-item" data-path="{{list[1].pagePath}}" bindtap="switchTab">
+    <view class="tab-ic tab-ic-mine {{selected === 1 ? 'on' : ''}}"></view>
+    <view class="tab-text {{selected === 1 ? 'on' : ''}}">{{list[1].text}}</view>
+  </view>
+</view>

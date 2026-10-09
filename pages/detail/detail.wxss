@@ -1,0 +1,68 @@
+.detail { padding-bottom: 40rpx; background: var(--bg); min-height: 100vh; }
+
+.cover {
+  width: 100%;
+  height: 320rpx;
+  background: var(--card-2);
+}
+.cover-img { width: 100%; height: 100%; }
+.cover-empty {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 120rpx;
+}
+
+.map { width: 100%; height: 34vh; }
+.loc-link {
+  text-align: center;
+  font-size: 26rpx;
+  color: var(--brand);
+  padding: 18rpx;
+  background: var(--card);
+  border-bottom: 1rpx solid var(--line);
+}
+
+.actions {
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx;
+  background: var(--card);
+}
+.act {
+  flex: 1;
+  background: var(--card-2);
+  border: 2rpx solid var(--line);
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  color: var(--text);
+  padding: 14rpx 0;
+}
+.act.on { border-color: var(--brand); color: var(--brand); font-weight: 700; }
+
+.gallery { white-space: nowrap; padding: 0 24rpx 24rpx; background: var(--card); }
+.gallery-img {
+  display: inline-block;
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 12rpx;
+  margin-right: 16rpx;
+}
+
+.info { margin: 24rpx; padding: 28rpx; }
+.name { font-size: 38rpx; font-weight: 700; color: var(--text); }
+.meta { margin-top: 16rpx; display: flex; flex-wrap: wrap; gap: 12rpx; }
+.tag { background: var(--brand-soft); color: var(--brand-2); font-size: 22rpx; padding: 4rpx 16rpx; border-radius: 999rpx; }
+.rating-row { margin-top: 20rpx; display: flex; align-items: center; }
+.star { color: var(--star-off); margin-right: 6rpx; }
+.star.on { color: var(--brand); }
+.big { font-size: 40rpx; }
+.avg { margin-left: auto; font-size: 24rpx; color: var(--muted); }
+.line { display: flex; margin-top: 18rpx; font-size: 28rpx; }
+.line.col { flex-direction: column; }
+.label { color: var(--muted); width: 140rpx; flex-shrink: 0; }
+.val { color: var(--text); flex: 1; }
+.owner-actions { margin: 24rpx; display: flex; gap: 20rpx; align-items: center; }
+.edit, .del { flex: 1; }
+.del { color: var(--danger) !important; border-color: rgba(217, 116, 107, 0.6) !important; }
+.admin-tag { font-size: 22rpx; color: var(--brand); background: var(--brand-soft); border: 1rpx solid var(--line); border-radius: 8rpx; padding: 6rpx 12rpx; white-space: nowrap; }
+.loading { text-align: center; padding: 80rpx 0; color: var(--muted); }

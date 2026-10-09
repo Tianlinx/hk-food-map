@@ -1,0 +1,24 @@
+<view class="app-root {{themeClass}}">
+<view class="search-bar">
+  <input placeholder="搜索店名 / 菜系 / 子项 / 地区 / 推荐菜" value="{{kw}}" bindinput="onInput" confirm-type="search" />
+</view>
+
+<view wx:if="{{!spots.length}}" class="empty">{{kw ? '没有匹配的探店记录' : '输入关键词开始搜索'}}</view>
+
+<view wx:for="{{spots}}" wx:key="_id" class="spot-card" data-id="{{item._id}}" bindtap="open">
+  <view class="card-main">
+    <image wx:if="{{item.coverUrl}}" class="card-cover" src="{{item.coverUrl}}" mode="aspectFill" />
+    <image wx:elif="{{item.cuisineIcon}}" class="card-cover" src="{{item.cuisineIcon}}" mode="aspectFill" />
+    <view wx:else class="card-cover card-cover-empty">🍜</view>
+    <view class="card-body">
+      <view class="name">{{item.name}} <text wx:if="{{item.rating}}" class="rating-label">{{item.ratingLabel}}</text></view>
+      <view class="meta">
+        <text wx:if="{{item.district}}" class="tag">{{item.district}}</text>
+        <text wx:if="{{item.cuisine}}" class="tag">{{item.cuisine}}</text>
+        <text wx:if="{{item.cuisine_detail}}" class="tag">{{item.cuisine_detail}}</text>
+      </view>
+      <view wx:if="{{item.review}}" class="review">{{item.review}}</view>
+    </view>
+  </view>
+</view>
+</view>

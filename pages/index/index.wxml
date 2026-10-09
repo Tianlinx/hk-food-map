@@ -1,0 +1,138 @@
+<view class="page app-root {{themeClass}}">
+  <!-- 顶部搜索 + 筛选 -->
+  <view class="topbar">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="输入即筛选，回车进高级搜索" value="{{kw}}" bindinput="onSearchInput" bindconfirm="goSearchPage" />
+      <text wx:if="{{kw}}" class="search-clear" catchtap="clearKw">×</text>
+    </view>
+    <view class="filter-trigger" bindtap="toggleFilter">筛选：{{filterText}}</view>
+  </view>
+
+  <!-- 地图舞台：地图铺满，底部可拖拽列表浮在地图上层 -->
+  <view class="stage">
+    <map
+      id="map"
+      class="map"
+      longitude="{{center.lng}}"
+      latitude="{{center.lat}}"
+      scale="{{scale}}"
+      markers="{{markers}}"
+      show-location
+      bindmarkertap="onMarkerTap"
+    >
+      <cover-view class="map-btn fullscreen-btn" bindtap="toggleFullscreen">{{fullscreen ? '退出' : '全屏'}}</cover-view>
+      <cover-view class="map-legend">
+        <cover-view class="legend-item" wx:for="{{legend}}" wx:key="name">
+          <cover-view class="legend-dot" style="background:{{item.color}}"></cover-view>
+          <cover-view class="legend-text">{{item.name}}</cover-view>
+        </cover-view>
+      </cover-view>
+      <cover-view class="map-btn loc-btn" bindtap="goMyLocation">
+        <cover-view class="loc-cross-h"></cover-view>
+        <cover-view class="loc-cross-v"></cover-view>
+        <cover-view class="loc-dot"></cover-view>
+      </cover-view>
+    </map>
+
+    <!-- 可上下拖拽的探店列表（抽屉）：拖把手可三档吸附 -->
+    <view
+      class="sheet {{dragging ? 'dragging' : ''}} {{fullscreen ? 'sheet-hidden' : ''}}"
+      style="height:{{sheetH}}px; transform: translateY({{sheetY}}px);"
+    >
+      <view
+        class="sheet-header"
+        bindtouchstart="onSheetStart"
+        catchtouchmove="onSheetMove"
+        bindtouchend="onSheetEnd"
+        bindtouchcancel="onSheetEnd"
+        bindtap="toggleSheet"
+      >
+        <view class="sheet-bar"></view>
+        <view class="sheet-head">
+          <text class="sheet-title">附近探店 · {{displaySpots.length}} 家</text>
+          <text class="sheet-hint">{{sheetHint}}</text>
+        </view>
+      </view>
+
+      <scroll-view class="sheet-list" scroll-y style="height:{{sheetListH}}px">
+        <view wx:if="{{displaySpots.length === 0}}" class="empty muted">
+          还没有符合条件的探店记录
+        </view>
+
+        <view
+          wx:for="{{displaySpots}}"
+          wx:key="_id"
+          class="spot card"
+          data-id="{{item._id}}"
+          bindtap="onTapCard"
+        >
+          <image wx:if="{{item.coverUrl}}" class="spot-img" src="{{item.coverUrl}}" mode="aspectFill" />
+          <image wx:elif="{{item.cuisineIcon}}" class="spot-img" src="{{item.cuisineIcon}}" mode="aspectFill" />
+          <view wx:else class="spot-img spot-img-empty">🍜</view>
+
+          <view class="spot-body">
+            <view class="spot-name">{{item.name}}</view>
+            <view class="spot-meta muted">
+              <text wx:if="{{item.district}}">{{item.district}}</text>
+              <text wx:if="{{item.cuisine}}"> · {{item.cuisine}}</text>
+              <text wx:if="{{item.cuisine_detail}}">（{{item.cuisine_detail}}）</text>
+            </view>
+            <view wx:if="{{item.rating}}" class="spot-rating">
+              <text class="star on">{{item.rating}}</text>
+              <text class="muted small">{{item.ratingLabel}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{displaySpots.length > 2}}" class="list-end muted">
+          — 共 {{displaySpots.length}} 家，已到底 —
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 筛选面板 -->
+  <view wx:if="{{showFilter}}" class="filter-mask" bindtap="toggleFilter">
+    <view class="filter-panel card" catchtap="noop">
+      <view class="filter-title">筛选条件</view>
+
+      <view class="filter-line">
+        <text class="filter-label">地区</text>
+        <picker mode="selector" range="{{districtOptions}}" bindchange="onPickDistrict">
+          <view class="picker">{{filters.district || '不限'}} ▾</view>
+        </picker>
+      </view>
+
+      <view class="filter-line">
+        <text class="filter-label">菜系</text>
+        <picker mode="selector" range="{{cuisineOptions}}" bindchange="onPickCuisine">
+          <view class="picker">{{filters.cuisine || '不限'}} ▾</view>
+        </picker>
+      </view>
+
+      <view class="filter-line">
+        <text class="filter-label">评分</text>
+        <view class="rating-row">
+          <text
+            wx:for="{{[1,2,3,4,5]}}"
+            wx:key="*this"
+            class="star {{filters.minRating >= item ? 'on' : ''}}"
+            data-val="{{item}}"
+            bindtap="onPickRating"
+          >★</text>
+          <text
+            class="chip-clear {{filters.minRating ? '' : 'on'}}"
+            bindtap="clearRating"
+          >全评分</text>
+          <text class="small" wx:if="{{filters.minRating}}">{{filters.minRating}}星以上</text>
+        </view>
+      </view>
+
+      <view class="filter-actions">
+        <button class="btn-ghost" bindtap="resetFilter">重置</button>
+        <button class="btn-primary" bindtap="applyFilter">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

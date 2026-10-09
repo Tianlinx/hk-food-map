@@ -1,0 +1,111 @@
+<!-- 未登录 -->
+<view class="app-root {{themeClass}}">
+<view wx:if="{{!loggedIn}}" class="login-card">
+  <view class="login-emoji">🍜</view>
+  <view class="login-title">香港美食地图 · 我的</view>
+  <view class="login-sub">登录后即可查看「我的探店」与「我的收藏」</view>
+  <button class="wx-login-btn" bindtap="login">微信一键登录 / 注册</button>
+</view>
+
+<!-- 已登录 -->
+<block wx:else>
+  <view class="profile">
+    <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <image wx:if="{{userInfo.avatarUrl}}" class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar avatar-emoji">🧑</view>
+    </button>
+    <view class="profile-info">
+      <input class="nick-input" type="nickname" placeholder="点击设置昵称" value="{{userInfo.nickName}}" bindblur="onNickBlur" bindchange="onNickBlur" />
+      <view class="profile-tip">已登录 · 微信用户</view>
+    </view>
+  </view>
+
+  <view class="settings-entry" bindtap="goSettings">
+    <text class="se-left">⚙️ 设置</text>
+    <text class="se-arrow">›</text>
+  </view>
+
+  <view wx:if="{{isAdmin}}" class="settings-entry review-entry" bindtap="goReview">
+    <text class="se-left">📝 审核投稿</text>
+    <text class="se-arrow">›</text>
+  </view>
+
+  <view class="seg">
+    <view wx:if="{{isAdmin}}" class="seg-item {{tab==='mine'?'on':''}}" data-t="mine" bindtap="switchTab">我的探店（{{mineSpots.length}}）</view>
+    <view class="seg-item {{tab==='fav'?'on':''}}" data-t="fav" bindtap="switchTab">我的收藏（{{favSpots.length}}）</view>
+    <view class="seg-item {{tab==='sub'?'on':''}}" data-t="sub" bindtap="switchTab">我的投稿（{{subSpots.length}}）</view>
+  </view>
+
+  <!-- 我的探店（管理员直接发布的展示内容） -->
+  <block wx:if="{{tab==='mine'}}">
+    <view wx:if="{{loading}}" class="empty">加载中…</view>
+    <view wx:elif="{{!mineSpots.length}}" class="empty">你还没有发布探店记录，点底部 ＋ 添加吧</view>
+    <view wx:for="{{mineSpots}}" wx:key="_id" class="spot-card">
+      <view class="card-main" data-id="{{item._id}}" bindtap="open">
+        <image wx:if="{{item.coverUrl}}" class="card-cover" src="{{item.coverUrl}}" mode="aspectFill" />
+        <image wx:elif="{{item.cuisineIcon}}" class="card-cover" src="{{item.cuisineIcon}}" mode="aspectFill" />
+        <view wx:else class="card-cover card-cover-empty">🍜</view>
+        <view class="card-body">
+          <view class="name">{{item.name}} <text wx:if="{{item.rating}}" class="rating-label">{{item.ratingLabel}}</text></view>
+          <view class="meta">
+            <text wx:if="{{item.district}}" class="tag">{{item.district}}</text>
+            <text wx:if="{{item.cuisine}}" class="tag">{{item.cuisine}}</text>
+            <text wx:if="{{item.cuisine_detail}}" class="tag">{{item.cuisine_detail}}</text>
+          </view>
+          <view wx:if="{{item.review}}" class="review">{{item.review}}</view>
+        </view>
+      </view>
+      <view class="card-actions">
+        <button class="mini-btn" catchtap="edit" data-id="{{item._id}}">✏️ 编辑</button>
+        <button class="mini-btn danger" catchtap="remove" data-id="{{item._id}}">🗑 删除</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 我的收藏 -->
+  <block wx:elif="{{tab==='fav'}}">
+    <view wx:if="{{!favSpots.length}}" class="empty">还没有收藏，去店铺详情页点「☆ 收藏」吧</view>
+    <view wx:for="{{favSpots}}" wx:key="_id" class="spot-card">
+      <view class="card-main" data-id="{{item._id}}" bindtap="open">
+        <image wx:if="{{item.coverUrl}}" class="card-cover" src="{{item.coverUrl}}" mode="aspectFill" />
+        <image wx:elif="{{item.cuisineIcon}}" class="card-cover" src="{{item.cuisineIcon}}" mode="aspectFill" />
+        <view wx:else class="card-cover card-cover-empty">🍜</view>
+        <view class="card-body">
+          <view class="name">{{item.name}} <text wx:if="{{item.rating}}" class="rating-label">{{item.ratingLabel}}</text></view>
+          <view class="meta">
+            <text wx:if="{{item.district}}" class="tag">{{item.district}}</text>
+            <text wx:if="{{item.cuisine}}" class="tag">{{item.cuisine}}</text>
+            <text wx:if="{{item.cuisine_detail}}" class="tag">{{item.cuisine_detail}}</text>
+          </view>
+          <view wx:if="{{item.review}}" class="review">{{item.review}}</view>
+        </view>
+      </view>
+      <view class="card-actions">
+        <button class="mini-btn" catchtap="open" data-id="{{item._id}}">查看详情</button>
+        <button class="mini-btn danger" catchtap="unfav" data-id="{{item._id}}" data-favid="{{item.favId}}">取消收藏</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 我的投稿（普通用户提交的，审核中） -->
+  <block wx:elif="{{tab==='sub'}}">
+    <view wx:if="{{!subSpots.length}}" class="empty">还没有投稿，点底部 ＋ 提交你的探店吧</view>
+    <view wx:for="{{subSpots}}" wx:key="_id" class="spot-card">
+      <view class="card-main">
+        <view wx:if="{{item.cover}}" class="card-cover" src="{{item.cover}}" mode="aspectFill" />
+        <view wx:elif="{{item.photo_paths.length}}" class="card-cover" src="{{item.photo_paths[0]}}" mode="aspectFill" />
+        <view wx:else class="card-cover card-cover-empty">🍜</view>
+        <view class="card-body">
+          <view class="name">{{item.name}} <text class="status-pending">审核中</text></view>
+          <view class="meta">
+            <text wx:if="{{item.district}}" class="tag">{{item.district}}</text>
+            <text wx:if="{{item.cuisine}}" class="tag">{{item.cuisine}}</text>
+            <text wx:if="{{item.cuisine_detail}}" class="tag">{{item.cuisine_detail}}</text>
+          </view>
+          <view wx:if="{{item.review}}" class="review">{{item.review}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</block>
+</view>

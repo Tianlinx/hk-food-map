@@ -1,0 +1,18 @@
+{
+  "miniprogramRoot": "./",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "appid": "wx3603744c3930b8b1",
+  "projectname": "hk-food-map-miniprogram",
+  "description": "香港美食地图小程序",
+  "compileType": "miniprogram",
+  "libVersion": "latest",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true
+  },
+  "condition": {},
+  "isGameTourist": false
+}

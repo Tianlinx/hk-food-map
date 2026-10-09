@@ -1,0 +1,40 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/add/add",
+    "pages/detail/detail",
+    "pages/search/search",
+    "pages/mine/mine",
+    "pages/settings/settings",
+    "pages/review/review"
+  ],
+  "window": {
+    "navigationBarTitleText": "香港美食地图",
+    "navigationBarBackgroundColor": "#141210",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#141210"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#8a8a8a",
+    "selectedColor": "#d4af37",
+    "backgroundColor": "#111111",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "地图", "iconPath": "assets/tabbar/map.png", "selectedIconPath": "assets/tabbar/map_active.png" },
+      { "pagePath": "pages/mine/mine", "text": "我的", "iconPath": "assets/tabbar/mine.png", "selectedIconPath": "assets/tabbar/mine_active.png" }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于在地图上展示美食店铺的位置"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

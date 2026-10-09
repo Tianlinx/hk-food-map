@@ -1,0 +1,2 @@
+/* web-view 全屏即可，无需额外样式 */
+page { height: 100%; }

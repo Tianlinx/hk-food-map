@@ -1,0 +1,240 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* 顶部搜索 + 筛选 */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 16rpx;
+  background: var(--card);
+  border-bottom: 1rpx solid var(--line);
+  flex-shrink: 0;
+}
+.search-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--card-2);
+  border: 1rpx solid var(--line);
+  border-radius: 999rpx;
+  padding: 10rpx 20rpx;
+}
+.search-icon { font-size: 28rpx; margin-right: 12rpx; }
+.search-input { flex: 1; font-size: 28rpx; height: 56rpx; color: var(--text); }
+.search-clear {
+  width: 40rpx; height: 40rpx;
+  line-height: 38rpx; text-align: center;
+  background: var(--card-2); color: var(--brand-2);
+  border-radius: 50%; font-size: 28rpx;
+}
+.filter-trigger {
+  font-size: 26rpx;
+  color: var(--brand);
+  white-space: nowrap;
+}
+
+/* 地图舞台：地图铺满 + 抽屉浮在其上；底部为自定义 tabBar 留位 */
+.stage {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  margin-bottom: calc(100rpx + env(safe-area-inset-bottom));
+}
+.map {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-btn {
+  position: absolute;
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  border-radius: 999rpx;
+  padding: 12rpx 28rpx;
+  font-size: 26rpx;
+  line-height: 1.3;
+  color: var(--brand);
+  font-weight: 600;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+}
+.fullscreen-btn { left: 24rpx; top: 24rpx; }
+/* 定位键：放在地图上半区的右下角。
+   原来是 right/bottom 贴底，而抽屉默认半展会盖住地图下半部，按钮被压在里面点不到；
+   改为按高度百分比定位（约在垂直中线略上），任何机型都落在"上半幅地图"的右下角，
+   且始终在抽屉上沿之上。 */
+.loc-btn { right: 24rpx; top: 42%; width: 76rpx; height: 76rpx; padding: 0; background: var(--card); border: 3rpx solid var(--brand); border-radius: 50%; box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.35); }
+.loc-cross-h { position: absolute; top: 36rpx; left: 14rpx; width: 48rpx; height: 4rpx; background: var(--brand); }
+.loc-cross-v { position: absolute; top: 14rpx; left: 36rpx; width: 4rpx; height: 48rpx; background: var(--brand); }
+.loc-dot { position: absolute; top: 32rpx; left: 32rpx; width: 12rpx; height: 12rpx; border-radius: 50%; background: var(--brand); }
+
+/* 菜系四色图例（右上角） */
+.map-legend {
+  position: absolute;
+  right: 24rpx;
+  top: 24rpx;
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  border-radius: 14rpx;
+  padding: 12rpx 18rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+.legend-item { display: flex; flex-direction: row; align-items: center; }
+.legend-dot { width: 18rpx; height: 18rpx; border-radius: 50%; margin-right: 10rpx; }
+.legend-text { font-size: 20rpx; color: var(--text); }
+
+/* ===== 底部可拖拽抽屉 ===== */
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--card);
+  border-radius: 28rpx 28rpx 0 0;
+  box-shadow: 0 -8rpx 30rpx rgba(0, 0, 0, 0.35);
+  /* 松手吸附 / 全屏滑出都走这个过渡 */
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.3, 1), opacity 0.3s ease;
+}
+/* 拖动中关闭过渡，保证跟手 */
+.sheet.dragging { transition: none; }
+/* 全屏时向下滑出消失 */
+.sheet-hidden {
+  transform: translateY(115%) !important;
+  opacity: 0;
+}
+
+.sheet-header {
+  height: 104rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 14rpx;
+  box-sizing: border-box;
+}
+.sheet-bar {
+  width: 72rpx;
+  height: 8rpx;
+  border-radius: 999rpx;
+  background: var(--line);
+}
+.sheet-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14rpx 32rpx 0;
+  box-sizing: border-box;
+}
+.sheet-title { font-size: 28rpx; font-weight: 600; color: var(--text); }
+.sheet-hint { font-size: 22rpx; color: var(--brand); }
+
+/* 注意：scroll-view 想竖向滚动必须有确定高度。
+   这里不能用 flex:1 —— flex 主轴会以 flex-basis 覆盖 height，
+   部分基础库下滚动区高度算成 0，表现为内容被 overflow:hidden 裁掉、滑不动。
+   高度由 JS 按「抽屉高 - 把手高」算出 px 内联设置，CSS 只保证不被 flex 拉伸。 */
+.sheet-list {
+  flex: none;
+  box-sizing: border-box;
+  padding: 8rpx 16rpx 24rpx;
+}
+.empty { text-align: center; padding: 60rpx 0; font-size: 26rpx; }
+.list-end { text-align: center; padding: 16rpx 0 8rpx; font-size: 22rpx; color: var(--muted); }
+
+.spot {
+  display: flex;
+  padding: 16rpx;
+  margin-bottom: 16rpx;
+}
+.spot-img {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+  background: var(--card-2);
+}
+.spot-img-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+}
+.spot-body { flex: 1; padding-left: 20rpx; display: flex; flex-direction: column; justify-content: center; }
+.spot-name { font-size: 30rpx; font-weight: 600; color: var(--text); }
+.spot-meta { font-size: 24rpx; margin-top: 8rpx; color: var(--muted); }
+.spot-rating { margin-top: 12rpx; display: flex; align-items: center; }
+
+/* 筛选面板 */
+/* z-index 需高于自定义 tabBar(50)，否则「重置/确定」会被底栏盖住点不到；
+   padding-bottom 为底栏(100rpx)+安全区留位，面板贴底但不被遮挡 */
+.filter-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+.filter-panel {
+  width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 32rpx;
+  border-radius: 24rpx 24rpx 0 0;
+  box-sizing: border-box;
+}
+.filter-title { font-size: 32rpx; font-weight: 600; margin-bottom: 20rpx; color: var(--text); }
+.filter-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid var(--line-2);
+}
+.filter-label { font-size: 28rpx; color: var(--muted); }
+.picker {
+  font-size: 28rpx;
+  color: var(--text);
+  background: var(--card-2);
+  padding: 12rpx 24rpx;
+  border-radius: 12rpx;
+}
+.stars { display: flex; align-items: center; }
+.star { font-size: 40rpx; color: var(--star-off); margin-right: 6rpx; }
+.star.on { color: var(--brand); }
+.small { font-size: 22rpx; margin-left: 10rpx; color: var(--muted); }
+
+.rating-row { display: flex; align-items: center; flex-wrap: wrap; }
+.chip-clear {
+  margin-left: 16rpx;
+  padding: 8rpx 20rpx;
+  font-size: 24rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid var(--line);
+  background: var(--card-2);
+  color: var(--muted);
+}
+.chip-clear.on {
+  border-color: var(--brand);
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.filter-actions { display: flex; justify-content: flex-end; gap: 20rpx; margin-top: 28rpx; }
+.filter-actions .btn-ghost,
+.filter-actions .btn-primary { min-width: 180rpx; }

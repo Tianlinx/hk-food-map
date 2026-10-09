@@ -1,0 +1,30 @@
+<view class="app-root {{themeClass}}">
+  <view class="page-head">待审核投稿（{{list.length}}）</view>
+
+  <view wx:if="{{loading}}" class="empty">加载中…</view>
+  <view wx:elif="{{!list.length}}" class="empty">暂无投稿。用户通过底部 ＋ 提交的探店会出现在这里，审核后发布到地图。</view>
+
+  <view wx:for="{{list}}" wx:key="_id" class="sub-card">
+    <view class="sub-head">
+      <text class="sub-name">{{item.name}}</text>
+      <text wx:if="{{item.rating}}" class="rating-label">{{item.rating}}星</text>
+    </view>
+    <view class="meta">
+      <text wx:if="{{item.district}}" class="tag">{{item.district}}</text>
+      <text wx:if="{{item.cuisine}}" class="tag">{{item.cuisine}}</text>
+      <text wx:if="{{item.cuisine_detail}}" class="tag">{{item.cuisine_detail}}</text>
+    </view>
+    <view wx:if="{{item.address}}" class="sub-line">📍 {{item.address}}</view>
+    <view wx:if="{{item.recommendedDishes}}" class="sub-line">🍽 推荐：{{item.recommendedDishes}}</view>
+    <view wx:if="{{item.review}}" class="sub-review">{{item.review}}</view>
+
+    <view wx:if="{{item.photo_paths.length}}" class="sub-photos">
+      <image wx:for="{{item.photo_paths}}" wx:for-item="p" wx:key="*this" class="sub-photo" src="{{p}}" mode="aspectFill" data-urls="{{item.photo_paths}}" bindtap="preview" />
+    </view>
+
+    <view class="sub-actions">
+      <button class="mini-btn ok" catchtap="approve" data-id="{{item._id}}">✓ 通过并发布</button>
+      <button class="mini-btn danger" catchtap="reject" data-id="{{item._id}}">✗ 拒绝</button>
+    </view>
+  </view>
+</view>
